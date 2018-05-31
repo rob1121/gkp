@@ -1,25 +1,18 @@
 import axios from 'axios';
 import React from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {FILTERS_URL} from '../../constants';
-import Typeahead from './Forms/Typeahead';
-import Select from './Forms/Select';
-import Limit from './Forms/Limit';
-import DatePicker from './Forms/DatePicker';
-import FilterColumn from '../components/FilterColumn';
-import FilterDownload from './Filter.Download';
-import CollapsePanel from './Layout/CollapsePanel';
-import Row from './Layout/Row';
+import { updateQuery, updatePagination, setColumn, setWrnCode, setErrCode, setPlatform } from '../../actions';
+import Typeahead from '../Form/Typeahead';
+import Select from '../Form/Select';
+import Limit from '../Form/Limit';
+import DatePicker from '../Form/DatePicker';
+import FilterColumn from '../Form/FilterColumn';
+import FilterDownload from '../Form/FilterDownload';
+import CollapsePanel from '../Form/CollapsePanel';
+import Row from '../Utilities/Row';
 
-export default class Filter extends React.Component {
-  state = {
-    options: {
-      columns: [],
-      platform: [],
-      err_code: [],
-      wrn_code: [],
-    },
-  }
+class Index extends React.Component {
 
   /**
    * set initial state of the page
@@ -29,90 +22,68 @@ export default class Filter extends React.Component {
     .then(this.updateFilters);
   }
 
+  componentDidUpdate = (nextProps) => {
+    const isPageHasNewUpdate = JSON.stringify(nextProps.page) !== JSON.stringify(this.props.page);
+    return isPageHasNewUpdate;
+  }
+
   updateFilters = ({ data: { platform, err_code, wrn_code, columns } }) => {
-    this.setState({
-      ...this.state,
-      options: {
-        ...this.state.options,
-        platform,
-        err_code,
-        wrn_code,
-        columns,
-      },
-    });
-  }
+    const {setColumn, setWrnCode, setErrCode, setPlatform} = this.props;
 
-  /**
-   * update query
-   *
-   * @param  {object} newQuery new user input query
-   */
-  updateQuery = newQuery => {
-    const { query, setQuery } = this.props;
-    setQuery({ ...query, ...newQuery });
-  }
-
-  updatePerPage = newPage => {
-    const { page, setPerPage, fetchPaginateResult } = this.props;
-    const totalRowBrowsed = page.per_page * page.current_page;
-    const pages = (page.total > totalRowBrowsed ? totalRowBrowsed : page.total) / newPage;
-    const currentPage = Math.ceil(pages);
-
-    /* set per_page state */
-    setPerPage(newPage).then(() => {
-      fetchPaginateResult(currentPage);
-    });
+    setColumn(columns);
+    setWrnCode(wrn_code);
+    setErrCode(err_code);
+    setPlatform(platform);
   }
 
   render() {
-    const { query, page, selectedColumns, setSelectedColumns } = this.props;
-    const { options } = this.state;
+    const { home_filter, query, page, updatePagination, updateQuery, setSelectedColumns } = this.props;
 
     return (
       <Row width={10} offset={1}>
         <CollapsePanel title="FILTERS" isCollapse>
           <div className="field">
             <div className="field-body">
-              <Limit page={page} onChange={this.updatePerPage} />
+              <Limit page={page} onChange={per_page => updatePagination({per_page}) } />
 
               {/* get lot_id dynamically */}
-              <Typeahead onChange={id => this.updateQuery({ lot_id: id ? id[0] : '' })} />
+              <Typeahead onChange={id => updateQuery({ lot_id: (id ? id[0] : '') })} />
 
               {/* get startDate and endDate */}
               <DatePicker
                 date_range={query.date_range}
-                onChange={dateRange => this.updateQuery({ date_range: dateRange })}
+                onChange={date_range => updateQuery({ date_range })}
                 name="date_range"
               />
 
               {/* platform selection */}
               <Select
                 name="platform"
-                options={options.platform}
-                onChange={platform => this.updateQuery({ platform })}
+                options={home_filter.platform}
+                onChange={platform => updateQuery({ platform })}
               />
 
               {/* err_code selection */}
               <Select
                 name="err_code"
-                options={options.err_code}
-                onChange={errCode => this.updateQuery({ err_code: errCode })}
+                options={home_filter.err_code}
+                onChange={ err_code => updateQuery({ err_code })}
               />
 
               {/* wrn_code selection */}
               <Select
                 name="wrn_code"
-                options={options.wrn_code}
-                onChange={wrnCode => this.updateQuery({ wrn_code: wrnCode })}
+                options={home_filter.wrn_code}
+                onChange={wrn_code => updateQuery({ wrn_code })}
               />
 
               <FilterColumn
-                options={options.columns}
-                selected={selectedColumns}
+                options={home_filter.columns}
+                selected={home_filter.selected_columns}
                 onChecked={setSelectedColumns}
               />
 
-              <FilterDownload query={query} columns={selectedColumns} />
+              <FilterDownload query={query} columns={home_filter.selected_columns} />
             </div>
           </div>
         </CollapsePanel>
@@ -121,25 +92,6 @@ export default class Filter extends React.Component {
   }
 }
 
-Filter.propTypes = {
-  query: PropTypes.shape({
-    platform: PropTypes.string,
-    err_code: PropTypes.string,
-    wrn_code: PropTypes.string,
-    lot_id: PropTypes.string,
-    sort_type: PropTypes.number,
-    sort_col: PropTypes.string,
-    date_range: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
-  page: PropTypes.shape({
-    total: PropTypes.number,
-    per_page: PropTypes.number,
-    current_page: PropTypes.number,
-    last_page: PropTypes.number,
-  }).isRequired,
-  selectedColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setQuery: PropTypes.func.isRequired,
-  setPerPage: PropTypes.func.isRequired,
-  fetchPaginateResult: PropTypes.func.isRequired,
-  setSelectedColumns: PropTypes.func.isRequired,
-};
+const mapStateToProps = ({ query, page, home_filter }) => ({ query, page, home_filter });
+
+export default connect(mapStateToProps, { updateQuery, updatePagination, setColumn, setWrnCode, setErrCode, setPlatform })(Index);

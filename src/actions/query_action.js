@@ -2,4 +2,4 @@ import {
   SET_QUERY
 } from '../actions/types';
 
-export const setQuery = payload => ({ type: SET_QUERY, payload });
+export const updateQuery = payload => ({ type: SET_QUERY, payload });

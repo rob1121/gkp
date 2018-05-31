@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import axios from 'axios';
-import { setPagination } from '../actions';
+import {} from '../actions';
 
-const mapStateToProps = ({ page }) => ({ page });
 
 
 class ReportPage extends Component {
@@ -16,4 +15,6 @@ class ReportPage extends Component {
   }
 }
 
-export default connect(mapStateToProps, { setPagination })(ReportPage);
+const mapStateToProps = ({ page }) => ({ page });
+
+export default connect(mapStateToProps, {})(ReportPage);
