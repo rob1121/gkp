@@ -60,11 +60,9 @@ export default class DatePicker extends React.Component {
    * toggle datepicker widgets
    */
   updateState = () => {
-    const isActive = !this.state.isActive;
-
     this.setState({
       ...this.state,
-      isActive,
+      isActive: !this.state.isActive,
     });
   }
 
@@ -80,7 +78,7 @@ export default class DatePicker extends React.Component {
     const { isActive } = this.state;
 
     // toggle date picker status
-    const datePickerContainer = isActive ? 'active' : 'in-active';
+    const datePickerContainer = this.state.isActive ? 'active' : 'in-active';
 
     // toggle class attribute for field block
     const searchBlocker = isActive ? 'field-blocker' : '';

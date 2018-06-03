@@ -10,10 +10,10 @@ const INITIAL_STATE = {
   lot_id: '',
   sort_type: '',
   sort_col: '',
-  date_range: {
-    from: moment().format('YYYY-DD-MM 00:00:00'),
-    to: moment().format('YYYY-DD-MM 23:59:59'),
-  },
+  date_range: [ 
+    moment().format('YYYY-DD-MM 00:00:00'),
+    moment().format('YYYY-DD-MM 23:59:59'),
+  ],
 };
 
 export default (state = INITIAL_STATE, action) => {

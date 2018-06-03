@@ -9,7 +9,7 @@ import Limit from '../Form/Limit';
 import DatePicker from '../Form/DatePicker';
 import FilterColumn from '../Form/FilterColumn';
 import FilterDownload from '../Form/FilterDownload';
-import CollapsePanel from '../Form/CollapsePanel';
+import CollapsePanel from '../Utilities/CollapsePanel';
 import Row from '../Utilities/Row';
 
 class Index extends React.Component {
@@ -38,7 +38,7 @@ class Index extends React.Component {
 
   render() {
     const { home_filter, query, page, updatePagination, updateQuery, setSelectedColumns } = this.props;
-
+    
     return (
       <Row width={10} offset={1}>
         <CollapsePanel title="FILTERS" isCollapse>

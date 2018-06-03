@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { setSTDFLogs} from '../actions';
+import {axios} from 'axios';
+import {map} from 'lodash';
+import { setSTDFLogs, updatePagination } from '../actions';
 import Footer from '../components/Footer';
 import Filter from '../components/Filter';
+import STDFData from '../components/STDFData';
+import Row from '../components/Utilities/Row';
+import CollapsePanel from '../components/Utilities/CollapsePanel';
+import Pagination from '../components/Utilities/Pagination';
 
 
 class HomePage extends Component {
@@ -25,15 +31,21 @@ class HomePage extends Component {
 
   updateSTDFLogs = currentPage => {
     const {
-      lot_id,
-      sort_type,
-      sort_col,
-      platform,
-      err_code,
-      wrn_code,
-      date_range,
-    } = this.props.query;
-    
+      query: {
+        lot_id,
+        sort_type,
+        sort_col,
+        platform,
+        err_code,
+        wrn_code,
+        date_range,
+      },
+      page,
+      page: {
+        per_page
+      },
+    } = this.props;
+
     const params = {
       lotId: lot_id,
       sortType: sort_type,
@@ -42,46 +54,52 @@ class HomePage extends Component {
       wrnCode: wrn_code,
       startDate: date_range[0],
       endDate: date_range[1],
-      page,
-      perPage,
+      page: page,
+      perPage: per_page,
       platform,
     };
 
-      const perPage = getState().search.paginate.per_page;
-      // server request
-      axios('/gatekeeper/api/search', {params})
-      .then(this.updateSTDFLogs);
+    axios('/gatekeeper/api/search', {params}).then(this.updateSTDFLogs);
   }
 
-  updateSTDFLogs = response => {
+  updateSTDFLogs = ({data}) => {
     // format data
-    const data = map(response.data.data, (result) => {
-      const retVal = result;
+    if(data === undefined) return false;
 
-      retVal.file_size = parseInt(retVal.file_size, 10) * 0.001;
-      retVal.file_size = retVal.file_size.toLocaleString();
-      retVal.file_size += 'kb';
-      retVal.transfer_time = retVal.transfer_time;
-      retVal.transfer_time += 's';
-      retVal.parse_time = retVal.parse_time;
-      retVal.parse_time += 's';
+    const stdfLogs = map(data.data, (result) => {
+      const log = result;
 
-      return retVal;
+      log.file_size = parseInt(log.file_size, 10) * 0.001;
+      log.file_size = log.file_size.toLocaleString();
+      log.file_size += 'kb';
+      log.transfer_time = log.transfer_time;
+      log.transfer_time += 's';
+      log.parse_time = log.parse_time;
+      log.parse_time += 's';
+
+      return log;
     });
 
-    this.props.setSTDFLogs(data);
+    this.props.setSTDFLogs(stdfLogs);
   }
   
   render() {
     return (
       <div>
         <Filter />
+        <Row width={10} offset={1}>
+          <CollapsePanel title="LOGS" isCollapse>
+            <STDFData />
+            <hr />
+            <Pagination pagination={this.props.page} onPageChange={this.updateSTDFLogs} />
+          </CollapsePanel>
+        </Row>
         <Footer />
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ page, query, stdf_logs }) => ({ page, query, stdf_logs });
+const mapStateToProps = ({ page, query }) => ({ page, query });
 
-  export default connect(mapStateToProps, { setSTDFLogs })(HomePage);
+  export default connect(mapStateToProps, { setSTDFLogs, updatePagination })(HomePage);
