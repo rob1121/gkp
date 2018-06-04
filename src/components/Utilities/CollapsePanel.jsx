@@ -21,7 +21,7 @@ export default class CollapsePanel extends Component {
   }));
 
   render() {
-    const { title, children, isCollapse } = this.props;
+    const { title, children } = this.props;
     // <article className={`message is-${panel}`}>
     return (
       <article className="message is-light" style={{ border: '1px solid #f0f0f0' }}>
@@ -34,7 +34,7 @@ export default class CollapsePanel extends Component {
             onClick={this.togglePanel}
           >
             <span className="icon">
-              <i className={`fa ${isCollapse ? 'fa-minus' : 'fa-plus'}`} />
+              <i className={`fa ${this.state.collapse ? 'fa-minus' : 'fa-plus'}`} />
             </span>
           </button>
         </div>
@@ -42,7 +42,7 @@ export default class CollapsePanel extends Component {
           className="message-body"
           style={{
             background: '#fff',
-            display: (isCollapse ? 'block' : 'none'),
+            display: (this.state.collapse ? 'block' : 'none'),
             border: '1px solid #f0f0f0',
           }}
         >

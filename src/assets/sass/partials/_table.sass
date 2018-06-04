@@ -1,0 +1,44 @@
+table
+	font-size: 10px
+#logger-table tbody
+	font-size: 10px
+	margin-bottom: 0
+
+	::selection
+  		background: $primary
+
+	td, th
+		white-space: nowrap
+
+	th
+		cursor: pointer
+		// color: $white
+
+	th.wafer-id,
+	th.op-code,
+	th.transfer-time,
+	th.parse-time,
+	th.file-size
+		text-align: right
+
+	td.wafer-id,
+	td.op-code,
+	td.transfer-time,
+	td.parse-time,
+	td.file-size
+		text-align: right
+
+
+	thead>tr
+		// background: linear-gradient(0deg, $thead-primary-color 50%, $thead-secondary-color)
+
+		th
+			border: 0px
+
+		// th:hover
+		// 	background: linear-gradient(0deg, darken($thead-primary-color, 5%) 50%, darken($thead-secondary-color, 5%))
+
+
+.tbl-container
+	border: 1px solid #f5f5f5
+	// border-radius: 5px

@@ -1,0 +1,117 @@
+
+
+
+.select
+	@extend %full-width
+
+.select-box
+	position: relative
+	@extend %full-width
+
+.search-container
+	.search-result
+		position: absolute
+		background: $white
+		z-index: 2
+		min-height: 200px
+		@extend %full-width
+		@include border-top-radius(0px)
+		@include border-bottom-radius(3px)
+
+	.input.is-small, .textarea.is-small
+		@include border-top-radius(3px)
+		@include border-bottom-radius(0px)
+
+.control.is-loading.is-small:after
+	top: 0.325em
+
+.select.is-small:after
+    margin-top: -0.300em
+    right: 0.825em
+
+
+.search-result
+	color: $black
+
+	.item
+		padding: 3px 10px 3px 10px
+		@extend %full-width
+
+		&:hover
+			background: $primary
+			color: $white
+
+.field-blocker
+	@extend %blocker
+	z-index: 1
+	opacity: 0
+
+
+.active,
+.in-active
+	position: relative
+
+	input
+		maring-top: 3px
+
+.active
+	position: absolute
+	display: inline
+	z-index: 2
+
+.in-active
+	@extend %hide
+
+.datepicker-field-blocker
+	@extend %blocker
+	z-index: 10
+
+.search-input
+	z-index: 2
+
+
+.typeahead-container ul
+    list-style: none
+    position: absolute
+    color: $black
+    background: $white
+    border: 1px solid $primary
+
+
+
+div.input.is-small .dropdown-menu
+		position: absolute
+		@extend %full-width
+		top: 100%
+
+div.input.is-small > div
+		@extend %full-width
+
+.form-control.bootstrap-typeahead-input-main,
+.form-control.bootstrap-typeahead-input-hint
+		@extend %full-width
+		margin: 0
+		border: 0
+
+		&:focus
+		    outline: 0px
+
+.dropdown-menu.bootstrap-typeahead-menu.dropdown-menu-justify
+	background: $white
+	z-index: 5
+	left: -1px
+	li:hover
+		background: lighten($text, 60%)
+	span
+		color: $text
+
+
+
+.close.bootstrap-typeahead-clear-button
+    border: 0
+    background: $invisible-background
+    cursor: pointer
+    transform: scale(200%)
+
+    &:hover span
+    	transform: scale(200%)

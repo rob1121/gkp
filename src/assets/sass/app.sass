@@ -1,0 +1,34 @@
+@import "node_modules/bourbon/core/_bourbon.scss"
+@import "node_modules/bulma/bulma.sass"
+@import "./partials/variables"
+@import "./partials/placeholder"
+@import "./partials/404"
+@import "./partials/nav"
+@import "./partials/table"
+@import "./partials/filters"
+
+footer
+	position: relative
+	z-index: 0
+	background-color: $dark-invert
+body 
+	margin-top: 90px
+	
+body section
+	margin-bottom: 5px
+
+.modal-card-body
+	margin-bottom: 0px
+
+.is-bold
+	font-weight: heavy
+	color: $text !important
+	font-size: 30px
+
+.fade-enter
+  opacity: 0
+  z-index: 1
+
+.fade-enter.fade-enter-active
+  opacity: 1
+  transition: opacity 250ms ease-in

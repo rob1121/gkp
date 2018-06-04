@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
 import 'bulma/css/bulma.css';
 import 'font-awesome/css/font-awesome.css';
+import './assets/sass/app.sass';
 import { Provider } from 'react-redux';
 import store from './store/index';
 import { TransitionGroup, CSSTransition } from "react-transition-group";

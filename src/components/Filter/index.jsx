@@ -18,7 +18,11 @@ class Index extends React.Component {
    * set initial state of the page
    */
   componentWillMount() {
-    axios(FILTERS_URL)
+    axios.get(FILTERS_URL, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      }
+    })
     .then(this.updateFilters);
   }
 
